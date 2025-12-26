@@ -15,10 +15,11 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
 
         registry.addMapping("/**")
-                .allowedOrigins(frontendUrl)
+                .allowedOriginPatterns(frontendUrl) // 🔥 MUST
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
-                .exposedHeaders("Set-Cookie")   // REQUIRED FOR JWT COOKIE
-                .allowCredentials(true);        // SEND COOKIES
+                .exposedHeaders("Set-Cookie")
+                .allowCredentials(true);
     }
 }
+
