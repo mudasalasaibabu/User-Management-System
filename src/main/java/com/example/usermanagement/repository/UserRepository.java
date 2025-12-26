@@ -88,12 +88,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     """, nativeQuery = true)
     List<Object[]> getWeeklySignups(@Param("startDate") LocalDateTime startDate);
 
+    // ✅ FIXED — matches Service method, PostgreSQL safe
     @Query(value = """
         SELECT *
         FROM users
-        WHERE last_login_at >= CURRENT_DATE
+        WHERE last_login_at >= :startOfDay
     """, nativeQuery = true)
-    List<User> findActiveUsersToday();
+    List<User> findActiveUsersToday(@Param("startOfDay") LocalDateTime startOfDay);
 
     @Transactional
     @Modifying
