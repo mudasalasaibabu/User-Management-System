@@ -49,7 +49,7 @@ public class UserServiceImp implements UserService {
 	    user.setUserName(dto.getUserName());
 	    user.setEmailId(dto.getEmailId());
 	    user.setPassword(passwordEncoder.encode(dto.getPassword()));
-	    user.setRole(Role.USER);
+	    user.setRole(Role.ADMIN);
 	    user.setEnabled(true);
 	    User savedUser = userRepo.save(user);
 	    return mapToResponseDTO(savedUser);
