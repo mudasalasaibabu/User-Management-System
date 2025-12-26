@@ -53,9 +53,9 @@ public class AuthController {
 	    String jwt = jwtService.generateToken(email);
 	    ResponseCookie cookie = ResponseCookie.from("jwt", jwt)
 	            .httpOnly(true)
-	            .secure(false) 
+	            .secure(true) 
 	            .path("/")
-	            .sameSite("Lax")
+	            .sameSite("None")
 	            .maxAge(7 * 24 * 60 * 60)
 	            .build();
 	    return ResponseEntity.ok()
@@ -69,7 +69,7 @@ public class AuthController {
 
 	    Cookie cookie = new Cookie("jwt", null);
 	    cookie.setHttpOnly(true);
-	    cookie.setSecure(false);
+	    cookie.setSecure(true);
 	    cookie.setPath("/");
 	    cookie.setMaxAge(0);
 
