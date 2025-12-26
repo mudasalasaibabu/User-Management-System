@@ -61,8 +61,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     long countByCreatedAtAfter(LocalDateTime date);
     long countByLastLoginAtAfter(LocalDateTime date);
 
+    // ✅ Monthly registrations (PostgreSQL-safe + Integer output)
     @Query(value = """
-        SELECT EXTRACT(MONTH FROM created_at) AS month, COUNT(*) AS total
+        SELECT 
+            CAST(EXTRACT(MONTH FROM created_at) AS INTEGER) AS month,
+            COUNT(*) AS total
         FROM users
         WHERE EXTRACT(YEAR FROM created_at) = :year
         GROUP BY month
@@ -70,8 +73,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     """, nativeQuery = true)
     List<Object[]> getMonthlyRegistrations(@Param("year") int year);
 
+    //  Weekly logins (PostgreSQL-safe + Integer output)
     @Query(value = """
-        SELECT EXTRACT(DOW FROM last_login_at) AS day, COUNT(*) AS total
+        SELECT 
+            CAST(EXTRACT(DOW FROM last_login_at) AS INTEGER) AS day,
+            COUNT(*) AS total
         FROM users
         WHERE last_login_at >= :startDate
         GROUP BY day
@@ -79,8 +85,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     """, nativeQuery = true)
     List<Object[]> getWeeklyLogins(@Param("startDate") LocalDateTime startDate);
 
+    //  Weekly signups (PostgreSQL-safe + Integer output)
     @Query(value = """
-        SELECT EXTRACT(DOW FROM created_at) AS day, COUNT(*) AS total
+        SELECT 
+            CAST(EXTRACT(DOW FROM created_at) AS INTEGER) AS day,
+            COUNT(*) AS total
         FROM users
         WHERE created_at >= :startDate
         GROUP BY day
@@ -88,7 +97,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     """, nativeQuery = true)
     List<Object[]> getWeeklySignups(@Param("startDate") LocalDateTime startDate);
 
-    // ✅ FIXED — matches Service method, PostgreSQL safe
+    //  Active users today (keeps service unchanged)
     @Query(value = """
         SELECT *
         FROM users
@@ -101,4 +110,3 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "UPDATE users SET password = ?2 WHERE email_id = ?1", nativeQuery = true)
     void updatePassword(String email, String password);
 }
-
