@@ -14,39 +14,90 @@ import com.example.usermanagement.entity.Role;
 import com.example.usermanagement.entity.User;
 
 import jakarta.transaction.Transactional;
+//@Repository
+//public interface UserRepository extends JpaRepository<User, Long> {
+//	boolean existsByEmailId(String emailId);
+//	Optional<User> findByEmailId(String emailId);
+//	
+//	 long countByRole(Role role);
+//	 long countByCreatedAtAfter(LocalDateTime date);
+//	 long countByLastLoginAtAfter(LocalDateTime date);
+//	 @Query(value = """
+//			    SELECT MONTH(created_at) AS month, COUNT(*) AS total
+//			    FROM users
+//			    WHERE YEAR(created_at) = :year
+//			    GROUP BY MONTH(created_at)
+//			    ORDER BY MONTH(created_at)
+//			  """,
+//			  nativeQuery = true
+//			)
+//			List<Object[]> getMonthlyRegistrations(@Param("year") int year);
+//			
+//@Query(value = "SELECT DAYOFWEEK(last_login_at) AS day,COUNT(*) AS total FROM users WHERE last_login_at >= :startDate GROUP BY DAYOFWEEK(last_login_at) ORDER BY DAYOFWEEK(last_login_at)" , nativeQuery = true)
+//List<Object[]> getWeeklyLogins(@Param("startDate") LocalDateTime startDate);
+//
+//@Query(value = "SELECT DAYOFWEEK(created_at) AS day, COUNT(*) AS total FROM users WHERE created_at >= :startDate GROUP BY DAYOFWEEK(created_at) ORDER BY DAYOFWEEK(created_at)", nativeQuery = true)
+//List<Object[]> getWeeklySignups(@Param("startDate") LocalDateTime startDate);
+//
+//@Query( value = "SELECT * FROM users WHERE DATE(last_login_at) = CURDATE()", nativeQuery = true)
+//	List<User> findActiveUsersToday(LocalDateTime startOfDay);
+//
+//@Transactional
+//@Modifying
+//@Query(value = "UPDATE users SET password = ?2 WHERE email_id = ?1",nativeQuery = true
+//)
+//void updatePassword(String email, String password);
+//
+//
+//}
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-	boolean existsByEmailId(String emailId);
-	Optional<User> findByEmailId(String emailId);
-	
-	 long countByRole(Role role);
-	 long countByCreatedAtAfter(LocalDateTime date);
-	 long countByLastLoginAtAfter(LocalDateTime date);
-	 @Query(value = """
-			    SELECT MONTH(created_at) AS month, COUNT(*) AS total
-			    FROM users
-			    WHERE YEAR(created_at) = :year
-			    GROUP BY MONTH(created_at)
-			    ORDER BY MONTH(created_at)
-			  """,
-			  nativeQuery = true
-			)
-			List<Object[]> getMonthlyRegistrations(@Param("year") int year);
-			
-@Query(value = "SELECT DAYOFWEEK(last_login_at) AS day,COUNT(*) AS total FROM users WHERE last_login_at >= :startDate GROUP BY DAYOFWEEK(last_login_at) ORDER BY DAYOFWEEK(last_login_at)" , nativeQuery = true)
-List<Object[]> getWeeklyLogins(@Param("startDate") LocalDateTime startDate);
 
-@Query(value = "SELECT DAYOFWEEK(created_at) AS day, COUNT(*) AS total FROM users WHERE created_at >= :startDate GROUP BY DAYOFWEEK(created_at) ORDER BY DAYOFWEEK(created_at)", nativeQuery = true)
-List<Object[]> getWeeklySignups(@Param("startDate") LocalDateTime startDate);
+    boolean existsByEmailId(String emailId);
+    Optional<User> findByEmailId(String emailId);
 
-@Query( value = "SELECT * FROM users WHERE DATE(last_login_at) = CURDATE()", nativeQuery = true)
-	List<User> findActiveUsersToday(LocalDateTime startOfDay);
+    long countByRole(Role role);
+    long countByCreatedAtAfter(LocalDateTime date);
+    long countByLastLoginAtAfter(LocalDateTime date);
 
-@Transactional
-@Modifying
-@Query(value = "UPDATE users SET password = ?2 WHERE email_id = ?1",nativeQuery = true
-)
-void updatePassword(String email, String password);
+    @Query(value = """
+        SELECT EXTRACT(MONTH FROM created_at) AS month, COUNT(*) AS total
+        FROM users
+        WHERE EXTRACT(YEAR FROM created_at) = :year
+        GROUP BY month
+        ORDER BY month
+    """, nativeQuery = true)
+    List<Object[]> getMonthlyRegistrations(@Param("year") int year);
 
+    @Query(value = """
+        SELECT EXTRACT(DOW FROM last_login_at) AS day, COUNT(*) AS total
+        FROM users
+        WHERE last_login_at >= :startDate
+        GROUP BY day
+        ORDER BY day
+    """, nativeQuery = true)
+    List<Object[]> getWeeklyLogins(@Param("startDate") LocalDateTime startDate);
 
+    @Query(value = """
+        SELECT EXTRACT(DOW FROM created_at) AS day, COUNT(*) AS total
+        FROM users
+        WHERE created_at >= :startDate
+        GROUP BY day
+        ORDER BY day
+    """, nativeQuery = true)
+    List<Object[]> getWeeklySignups(@Param("startDate") LocalDateTime startDate);
+
+    @Query(value = """
+        SELECT *
+        FROM users
+        WHERE last_login_at >= CURRENT_DATE
+    """, nativeQuery = true)
+    List<User> findActiveUsersToday();
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE users SET password = ?2 WHERE email_id = ?1", nativeQuery = true)
+    void updatePassword(String email, String password);
 }
+
