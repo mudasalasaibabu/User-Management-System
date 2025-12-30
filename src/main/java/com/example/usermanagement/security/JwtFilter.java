@@ -2,8 +2,8 @@ package com.example.usermanagement.security;
 
 import java.io.IOException;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
+@Lazy // ✅ ADD: load filter lazily (startup faster)
 public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -39,16 +40,20 @@ public class JwtFilter extends OncePerRequestFilter {
             FilterChain filterChain)
             throws ServletException, IOException {
 
-        String path = request.getRequestURI();
+        // ✅ ADD: Skip health check (very important for Render uptime pings)
+        String path = request.getServletPath();
+        if (path.equals("/health")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-        //Allow authentication & system settings APIs
+        // Allow authentication APIs (EXISTING LOGIC - UNCHANGED)
         if (path.startsWith("/api/auth")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-
-        // JWT AUTHENTICATION FIRST 
+        // JWT AUTHENTICATION FIRST (UNCHANGED)
 
         String token = null;
         String username = null;
@@ -79,7 +84,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 response.addCookie(deleteCookie);
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return; //STOP request
+                return; // STOP request
             }
         }
 
@@ -95,19 +100,22 @@ public class JwtFilter extends OncePerRequestFilter {
                                 null,
                                 userDetails.getAuthorities()
                         );
-                /*First: “details” ante enti? (VERY SIMPLE)
-						 details = request gurinchi extra information
-						Like:Ee request ekkadanunchi vachindi User IP address enti Anthe. Inka em ledu.*/
+
                 authToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
-                /*SecurityContextHolder anedi Spring Security already create chesina class, current request user info store cheyyadaniki.*/
+
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
 
-        // MAINTENANCE MODE CHECK (AFTER AUTH)
+        // ✅ ADD: Skip maintenance check if user is not authenticated
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
+        // MAINTENANCE MODE CHECK (EXISTING LOGIC - UNCHANGED)
         if (settingsService.getSettings().isMaintenanceMode()) {
 
             boolean isAdmin =

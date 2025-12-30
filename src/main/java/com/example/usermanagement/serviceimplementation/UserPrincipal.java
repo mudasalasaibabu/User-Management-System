@@ -3,12 +3,15 @@ package com.example.usermanagement.serviceimplementation;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
 import com.example.usermanagement.entity.User;
-
+@Service
+@Lazy
 public class UserPrincipal implements UserDetails {
 
     private User user;

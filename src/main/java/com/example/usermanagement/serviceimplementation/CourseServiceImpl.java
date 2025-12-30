@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.example.usermanagement.dto.CourseLessonDTO;
@@ -15,6 +16,7 @@ import com.example.usermanagement.repository.CourseRepository;
 import com.example.usermanagement.service.CourseService;
 
 @Service
+@Lazy
 public class CourseServiceImpl implements CourseService {
 
     @Autowired

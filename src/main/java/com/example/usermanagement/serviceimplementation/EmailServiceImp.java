@@ -1,11 +1,15 @@
 package com.example.usermanagement.serviceimplementation;
 
+
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.example.usermanagement.dto.MailBodyDTO;
 import com.example.usermanagement.service.EmailService;
 //@Service
+
 //public class EmailServiceImp implements EmailService {
 //	@Autowired
 //	private JavaMailSender javaMailSender;
@@ -30,6 +34,7 @@ import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
 
 @Service
+@Lazy
 public class EmailServiceImp implements EmailService {
 
     @Value("${MAIL_FROM}")

@@ -15,7 +15,7 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
 
         registry.addMapping("/**")
-                .allowedOriginPatterns(frontendUrl) // 🔥 MUST
+                .allowedOriginPatterns(frontendUrl) // MUST
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .exposedHeaders("Set-Cookie")
