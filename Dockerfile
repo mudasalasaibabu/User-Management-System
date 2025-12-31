@@ -3,24 +3,25 @@ FROM maven:3.9.9-eclipse-temurin-17 AS build
 
 WORKDIR /build
 
-# Copy pom and source
+# Copy pom and download dependencies first (cache optimization)
 COPY pom.xml .
-COPY src ./src
+RUN mvn dependency:go-offline
 
-# Build the application (skip tests)
+# Copy source and build
+COPY src ./src
 RUN mvn clean package -DskipTests
 
 
 # ---------------- RUN STAGE ----------------
-FROM eclipse-temurin:17-jdk
+FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
-# Copy the WAR from build stage
-COPY --from=build /build/target/UserManagement-0.0.1-SNAPSHOT.war app.war
+# Copy the JAR from build stage
+COPY --from=build /build/target/UserManagement-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose backend port
-EXPOSE 8081
+EXPOSE 8080
 
 # Run Spring Boot app
-ENTRYPOINT ["java", "-jar", "app.war"]
+ENTRYPOINT ["java","-jar","app.jar"]
