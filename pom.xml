@@ -17,8 +17,8 @@
     <artifactId>UserManagement</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <!-- WAR deployment -->
-    <packaging>war</packaging>
+    <!-- ✅ JAR deployment -->
+    <packaging>jar</packaging>
 
     <name>UserManagement</name>
     <description>User Management System</description>
@@ -26,9 +26,6 @@
     <!-- ================= PROPERTIES ================= -->
     <properties>
         <java.version>17</java.version>
-
-        <!-- Reduce Spring context scanning time -->
-        <spring.context.cache.maxSize>2048</spring.context.cache.maxSize>
     </properties>
 
     <dependencies>
@@ -37,49 +34,24 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- ================= SECURITY ================= -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
-        <!-- ================= WEB ================= -->
+        <!-- ================= WEB (Embedded Tomcat) ================= -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- ================= VALIDATION ================= -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
-
-        <!-- ================= TOMCAT (WAR REQUIRED) ================= -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
         </dependency>
 
         <!-- ================= DATABASE ================= -->
@@ -122,7 +94,7 @@
             <version>4.10.2</version>
         </dependency>
 
-        <!-- ================= PDF / CERTIFICATE ================= -->
+        <!-- ================= PDF ================= -->
         <dependency>
             <groupId>com.github.librepdf</groupId>
             <artifactId>openpdf</artifactId>
@@ -148,13 +120,14 @@
     <build>
         <plugins>
             <plugin>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-maven-plugin</artifactId>
-    <configuration>
-        <mainClass>com.example.usermanagement.UserManagementApplication</mainClass>
-    </configuration>
-</plugin>
-
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>
+                        com.example.usermanagement.UserManagementApplication
+                    </mainClass>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
