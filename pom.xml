@@ -17,15 +17,18 @@
     <artifactId>UserManagement</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <!-- WAR is mandatory -->
+    <!-- WAR deployment -->
     <packaging>war</packaging>
 
     <name>UserManagement</name>
     <description>User Management System</description>
 
+    <!-- ================= PROPERTIES ================= -->
     <properties>
         <java.version>17</java.version>
-        <hibernate.enhancer.enableLazyInitialization>false</hibernate.enhancer.enableLazyInitialization>
+
+        <!-- Reduce Spring context scanning time -->
+        <spring.context.cache.maxSize>2048</spring.context.cache.maxSize>
     </properties>
 
     <dependencies>
@@ -80,7 +83,6 @@
         </dependency>
 
         <!-- ================= DATABASE ================= -->
-        <!-- runtime scope is CORRECT for JDBC -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -109,7 +111,6 @@
         </dependency>
 
         <!-- ================= EMAIL ================= -->
-        <!-- MUST be default scope for WAR -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
@@ -121,8 +122,7 @@
             <version>4.10.2</version>
         </dependency>
 
-        <!-- ================= CERTIFICATE / PDF ================= -->
-        <!-- MUST be default scope for WAR -->
+        <!-- ================= PDF / CERTIFICATE ================= -->
         <dependency>
             <groupId>com.github.librepdf</groupId>
             <artifactId>openpdf</artifactId>
@@ -144,11 +144,15 @@
 
     </dependencies>
 
+    <!-- ================= BUILD ================= -->
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.usermanagement.UserManagementApplication</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>
