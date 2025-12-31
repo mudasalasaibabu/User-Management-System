@@ -148,12 +148,13 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <mainClass>com.usermanagement.UserManagementApplication</mainClass>
-                </configuration>
-            </plugin>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-maven-plugin</artifactId>
+    <configuration>
+        <mainClass>com.example.usermanagement.UserManagementApplication</mainClass>
+    </configuration>
+</plugin>
+
         </plugins>
     </build>
 
