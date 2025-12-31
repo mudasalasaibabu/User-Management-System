@@ -19,7 +19,6 @@ import com.example.usermanagement.repository.UserRepository;
 import com.example.usermanagement.service.EmailService;
 import com.example.usermanagement.service.ForgotPasswordService;
 @Service
-@Lazy
 public class ForgotPasswordServiceImpl implements ForgotPasswordService {
 	@Autowired
 	private UserRepository userRepository;

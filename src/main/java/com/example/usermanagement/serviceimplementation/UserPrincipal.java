@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.usermanagement.entity.User;
 @Service
-@Lazy
 public class UserPrincipal implements UserDetails {
 
     private User user;

@@ -18,7 +18,6 @@ import com.example.usermanagement.repository.UserRepository;
 import com.example.usermanagement.service.EnrollmentService;
 
 @Service
-@Lazy
 public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Autowired

@@ -25,7 +25,6 @@ import com.example.usermanagement.exceptionHandler.UserNotFoundException;
 import com.example.usermanagement.repository.UserRepository;
 import com.example.usermanagement.service.UserService;
 @Service
-@Lazy
 public class UserServiceImp implements UserService {
 	@Autowired
 	private UserRepository userRepo;

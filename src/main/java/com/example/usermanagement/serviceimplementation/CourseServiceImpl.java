@@ -16,7 +16,6 @@ import com.example.usermanagement.repository.CourseRepository;
 import com.example.usermanagement.service.CourseService;
 
 @Service
-@Lazy
 public class CourseServiceImpl implements CourseService {
 
     @Autowired
