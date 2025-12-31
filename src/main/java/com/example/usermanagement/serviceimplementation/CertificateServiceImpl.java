@@ -1,12 +1,13 @@
 package com.example.usermanagement.serviceimplementation;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.example.usermanagement.dto.CertificateDTO;
@@ -22,12 +23,12 @@ import com.example.usermanagement.service.ProgressService;
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
-
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfWriter;
 
 @Service
+@Lazy
 public class CertificateServiceImpl implements CertificateService {
 
     @Autowired

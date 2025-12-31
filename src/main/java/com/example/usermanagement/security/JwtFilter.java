@@ -21,7 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-@Lazy // ✅ ADD: load filter lazily (startup faster)
+@Lazy // load filter lazily (startup faster)
 public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -40,7 +40,7 @@ public class JwtFilter extends OncePerRequestFilter {
             FilterChain filterChain)
             throws ServletException, IOException {
 
-        // ✅ ADD: Skip health check (very important for Render uptime pings)
+        // ADD: Skip health check (very important for Render uptime pings)
         String path = request.getServletPath();
         if (path.equals("/health")) {
             filterChain.doFilter(request, response);
@@ -109,7 +109,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
 
-        // ✅ ADD: Skip maintenance check if user is not authenticated
+        // ADD: Skip maintenance check if user is not authenticated
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
             filterChain.doFilter(request, response);
             return;

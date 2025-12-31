@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import com.example.usermanagement.exceptionHandler.UserNotFoundException;
 import com.example.usermanagement.repository.UserRepository;
 import com.example.usermanagement.service.UserService;
 @Service
+@Lazy
 public class UserServiceImp implements UserService {
 	@Autowired
 	private UserRepository userRepo;

@@ -12,6 +12,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.example.usermanagement.dto.DashboardResponseDTO;
@@ -21,6 +22,7 @@ import com.example.usermanagement.entity.Role;
 import com.example.usermanagement.repository.UserRepository;
 
 @Service
+@Lazy
 public class DashboardService {
 
     @Autowired
