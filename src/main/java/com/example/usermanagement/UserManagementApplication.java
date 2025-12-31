@@ -6,7 +6,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.config.BootstrapMode;
 
 @SpringBootApplication
-@EnableJpaRepositories(bootstrapMode = BootstrapMode.LAZY)
+@EnableJpaRepositories(
+        basePackages = "com.example.usermanagement.repository",
+        bootstrapMode = BootstrapMode.LAZY
+)
 public class UserManagementApplication {
 
     public static void main(String[] args) {
