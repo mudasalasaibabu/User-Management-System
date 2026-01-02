@@ -21,7 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-@Lazy // load filter lazily (startup faster)
+
 public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
