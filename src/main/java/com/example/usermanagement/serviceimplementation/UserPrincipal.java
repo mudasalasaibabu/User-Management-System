@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.example.usermanagement.entity.User;
-@Service
+
 public class UserPrincipal implements UserDetails {
 
     private User user;
