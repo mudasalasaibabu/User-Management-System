@@ -16,7 +16,8 @@ import com.example.usermanagement.repository.UserCourseRepository;
 import com.example.usermanagement.repository.UserRepository;
 import com.example.usermanagement.service.EnrollmentService;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 public class EnrollmentServiceImpl implements EnrollmentService {
@@ -34,7 +35,6 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     @Override
     public void enroll(Long userId, Long courseId) {
 
-
         if (userCourseRepository
                 .findByUser_IdAndCourse_Id(userId, courseId)
                 .isPresent()) {
@@ -50,6 +50,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         userCourseRepository.save(new UserCourse(user, course));
     }
 
+    // THIS IS THE FIX
+    @Transactional(readOnly = true)
     @Override
     public List<UserCourseDTO> getMyCourses(Long userId) {
 
@@ -58,16 +60,15 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
         for (UserCourse uc : list) {
             response.add(new UserCourseDTO(
-                    uc.getCourse().getId(),                 
-                    uc.getCourse().getTitle(),              
-                    uc.getCourse().getLevel(),             
-                    uc.getCourse().getDurationHours(),      
-                    uc.getCourse().getCourseImageUrl(),     
-                    uc.getCompleted()                      
+                    uc.getCourse().getId(),
+                    uc.getCourse().getTitle(),
+                    uc.getCourse().getLevel(),
+                    uc.getCourse().getDurationHours(),
+                    uc.getCourse().getCourseImageUrl(),
+                    uc.getCompleted()
             ));
         }
 
         return response;
     }
-
 }
