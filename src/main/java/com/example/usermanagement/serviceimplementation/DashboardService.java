@@ -22,7 +22,7 @@ import com.example.usermanagement.entity.Role;
 import com.example.usermanagement.repository.UserRepository;
 
 @Service
-@Lazy
+
 public class DashboardService {
 
     @Autowired

@@ -25,4 +25,3 @@ public class AdminController {
         return ResponseEntity.ok(userService.getActiveUsersToday());
     }
 }
-

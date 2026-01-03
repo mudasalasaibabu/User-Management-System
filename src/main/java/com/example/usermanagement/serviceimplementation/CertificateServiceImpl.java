@@ -28,7 +28,6 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfWriter;
 
 @Service
-@Lazy
 public class CertificateServiceImpl implements CertificateService {
 
     @Autowired

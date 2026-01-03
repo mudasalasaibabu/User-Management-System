@@ -10,7 +10,6 @@ import com.example.usermanagement.repository.SystemSettingsRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-@Lazy
 public class SystemSettingsService {
 
     @Autowired

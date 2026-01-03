@@ -18,7 +18,6 @@ import com.example.usermanagement.repository.UserCourseRepository;
 import com.example.usermanagement.service.AdminCourseService;
 
 @Service
-@Lazy
 public class AdminCourseServiceImpl implements AdminCourseService {
 
     @Autowired

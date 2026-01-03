@@ -15,7 +15,6 @@ import com.example.usermanagement.repository.UserRepository;
 import com.example.usermanagement.service.ProgressService;
 
 @Service
-@Lazy
 public class ProgressServiceImpl implements ProgressService {
 
     @Autowired
