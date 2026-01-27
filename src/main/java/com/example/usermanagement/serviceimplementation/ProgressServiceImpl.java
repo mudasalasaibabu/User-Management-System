@@ -1,8 +1,8 @@
 package com.example.usermanagement.serviceimplementation;
 
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.example.usermanagement.dto.ProgressDTO;
@@ -47,11 +47,10 @@ public class ProgressServiceImpl implements ProgressService {
     @Override
     public ProgressDTO getCourseProgress(Long userId, Long courseId) {
 
-        int totalLessons =
-            lessonRepository.countByCourse_Id(courseId);
+        int totalLessons = lessonRepository.countByCourse_Id(courseId);
 
         if (totalLessons == 0) {
-            return new ProgressDTO(0);
+            return new ProgressDTO(0, List.of());
         }
 
         int completedLessons =
@@ -59,8 +58,10 @@ public class ProgressServiceImpl implements ProgressService {
 
         int percentage = (int) ((completedLessons * 100.0) / totalLessons);
 
-        return new ProgressDTO(percentage);
+        // ✅ NEW: get completed lesson IDs
+        List<Long> completedLessonIds =
+            progressRepository.findLessonIdsByUserAndCourse(userId, courseId);
+
+        return new ProgressDTO(percentage, completedLessonIds);
     }
-
 }
-

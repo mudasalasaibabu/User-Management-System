@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.example.usermanagement.entity.LessonProgress;
@@ -18,5 +19,15 @@ public interface LessonProgressRepository extends JpaRepository<LessonProgress,L
     
 
     int countByUser_IdAndLesson_Course_Id(Long userId, Long courseId);
+
+    @Query(value = """
+    	    SELECT lp.lesson_id
+    	    FROM lesson_progress lp
+    	    JOIN course_lesson cl ON lp.lesson_id = cl.id
+    	    WHERE lp.user_id = :userId
+    	      AND cl.course_id = :courseId
+    	""", nativeQuery = true)
+    		List<Long> findLessonIdsByUserAndCourse(Long userId, Long courseId);
+
 
 }
