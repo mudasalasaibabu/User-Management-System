@@ -23,11 +23,12 @@ public interface LessonProgressRepository extends JpaRepository<LessonProgress,L
     @Query(value = """
     	    SELECT lp.lesson_id
     	    FROM lesson_progress lp
-    	    JOIN course_lesson cl ON lp.lesson_id = cl.id
+    	    JOIN course_lessons cl ON lp.lesson_id = cl.id
     	    WHERE lp.user_id = :userId
     	      AND cl.course_id = :courseId
     	""", nativeQuery = true)
-    		List<Long> findLessonIdsByUserAndCourse(Long userId, Long courseId);
+    	List<Long> findLessonIdsByUserAndCourse(Long userId, Long courseId);
+
 
 
 }
