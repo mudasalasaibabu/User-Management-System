@@ -1,5 +1,4 @@
 package com.example.usermanagement.dto;
-
 public class CourseLessonDTO {
 
     private Long lessonId;

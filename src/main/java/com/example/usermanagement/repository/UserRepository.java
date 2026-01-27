@@ -61,7 +61,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     long countByCreatedAtAfter(LocalDateTime date);
     long countByLastLoginAtAfter(LocalDateTime date);
 
-    // ✅ Monthly registrations (PostgreSQL-safe + Integer output)
+    //  Monthly registrations (PostgreSQL-safe + Integer output)
     @Query(value = """
         SELECT 
             CAST(EXTRACT(MONTH FROM created_at) AS INTEGER) AS month,

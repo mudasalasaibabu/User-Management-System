@@ -34,12 +34,7 @@ public class JwtTokenService {
     }
 
     public String extractUserName(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
-    private <T> T extractClaim(String token, Function<Claims, T> resolver) {
-        Claims claims = extractAllClaims(token);
-        return resolver.apply(claims);
+        return extractAllClaims(token).getSubject();
     }
 
     private Claims extractAllClaims(String token) {
@@ -60,8 +55,9 @@ public class JwtTokenService {
     }
 
     private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
+        return extractAllClaims(token).getExpiration();
     }
+
     
 }
 

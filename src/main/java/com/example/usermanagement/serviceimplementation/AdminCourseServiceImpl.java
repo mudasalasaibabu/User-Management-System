@@ -57,7 +57,7 @@ public class AdminCourseServiceImpl implements AdminCourseService {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
-        // ❌ BLOCK DELETE if users enrolled
+        // Not Possible BLOCK DELETE if users enrolled
         if (userCourseRepository.existsByCourse(course)) {
             throw new RuntimeException("Cannot delete course. Users are enrolled.");
         }

@@ -15,4 +15,15 @@ public interface UserCourseRepository extends JpaRepository<UserCourse, Long> {/
     // Fetch all courses of a user
     List<UserCourse> findByUser_Id(Long userId);
     boolean existsByCourse(Course course);
+ 
+    // NEW for admin feature
+    // 1. How many users enrolled in a course
+    int countByCourse_Id(Long courseId);
+
+    // 2. How many users completed the course
+    int countByCourse_IdAndCompletedTrue(Long courseId);
+
+    // 3. List of enrolled users for a course
+    List<UserCourse> findByCourse_Id(Long courseId);
+
 }
