@@ -23,4 +23,6 @@ public interface AdminCourseService {
     void deleteLesson(Long lessonId);
     public List<CourseLessonDTO> getLessonsByCourse(Long courseId);
 
+	CourseLesson getLessonById(Long lessonId);
+
 }

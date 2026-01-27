@@ -73,7 +73,12 @@ public class AdminCourseController {
         adminCourseService.toggleLessonStatus(lessonId);
         return ResponseEntity.ok("Lesson status updated");
     }
-    
+    @GetMapping("/lessons/{lessonId}")
+    public ResponseEntity<CourseLesson> getLessonById(@PathVariable Long lessonId) {
+        CourseLesson lesson = adminCourseService.getLessonById(lessonId);
+        return ResponseEntity.ok(lesson);
+    }
+
     @PutMapping("/lessons/{lessonId}")
     public ResponseEntity<CourseLesson> updateLesson(
             @PathVariable Long lessonId,

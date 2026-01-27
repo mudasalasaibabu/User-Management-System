@@ -144,6 +144,13 @@ public class AdminCourseServiceImpl implements AdminCourseService {
 	    return response;
 	}
 
+	@Override
+	public CourseLesson getLessonById(Long lessonId) {
+	    return lessonRepository.findById(lessonId)
+	        .orElseThrow(() -> new RuntimeException("Lesson not found"));
+	}
+
+
 
 
 
