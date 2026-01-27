@@ -36,18 +36,4 @@ public class ProgressController {
         );
     }
 
-
-//    private Long getLoggedInUserId() {
-//
-//        Object principal = SecurityContextHolder
-//                .getContext()
-//                .getAuthentication()
-//                .getPrincipal();
-//
-//        if (principal instanceof UserPrincipal userPrincipal) {
-//            return userPrincipal.getUser().getId();
-//        }
-//
-//        throw new RuntimeException("Invalid authentication");
-//    }
 }
