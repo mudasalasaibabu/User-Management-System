@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.usermanagement.dto.CourseAnalyticsDTO;
 import com.example.usermanagement.dto.EnrolledUserDTO;
@@ -20,6 +21,7 @@ public class CourseAnalyticsServiceImp implements CourseAnalyticsService {
 	private UserCourseRepository userCourseRepository;
 	@Autowired
 	private CourseRepository courseRepository;
+	@Transactional(readOnly = true)
 	@Override
 	public CourseAnalyticsDTO getCourseAnalytics(Long courseId) {
 		 Course course = courseRepository.findById(courseId)
