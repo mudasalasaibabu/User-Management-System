@@ -12,10 +12,14 @@ import com.example.usermanagement.entity.User;
 import com.example.usermanagement.entity.UserCourse;
 import com.example.usermanagement.repository.UserCourseRepository;
 import com.example.usermanagement.service.CourseAnalyticsService;
+
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
 public class CourseAnalyticsServiceImp implements CourseAnalyticsService {
 	@Autowired
 	private UserCourseRepository userCourseRepository;
+	 @Transactional(readOnly = true) 
 	@Override
 	public CourseAnalyticsDTO getCourseAnalytics(Long courseId) {
 
