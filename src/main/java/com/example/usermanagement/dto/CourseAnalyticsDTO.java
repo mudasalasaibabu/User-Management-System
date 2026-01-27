@@ -5,49 +5,56 @@ import java.util.List;
 public class CourseAnalyticsDTO {
 
     private Long courseId;
+    private String courseName; 
     private int enrolledCount;
     private int completedCount;
     private List<EnrolledUserDTO> users;
 
-    public CourseAnalyticsDTO(Long courseId, int enrolledCount, int completedCount, List<EnrolledUserDTO> users) {
+    public CourseAnalyticsDTO(Long courseId, String courseName, int enrolledCount, int completedCount, List<EnrolledUserDTO> users) {
         this.courseId = courseId;
+        this.courseName = courseName;
         this.enrolledCount = enrolledCount;
         this.completedCount = completedCount;
         this.users = users;
     }
 
-	public Long getCourseId() {
-		return courseId;
-	}
+    public Long getCourseId() {
+        return courseId;
+    }
 
-	public void setCourseId(Long courseId) {
-		this.courseId = courseId;
-	}
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
+    }
 
-	public int getEnrolledCount() {
-		return enrolledCount;
-	}
+    public String getCourseName() {
+        return courseName;
+    }
 
-	public void setEnrolledCount(int enrolledCount) {
-		this.enrolledCount = enrolledCount;
-	}
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
 
-	public int getCompletedCount() {
-		return completedCount;
-	}
+    public int getEnrolledCount() {
+        return enrolledCount;
+    }
 
-	public void setCompletedCount(int completedCount) {
-		this.completedCount = completedCount;
-	}
+    public void setEnrolledCount(int enrolledCount) {
+        this.enrolledCount = enrolledCount;
+    }
 
-	public List<EnrolledUserDTO> getUsers() {
-		return users;
-	}
+    public int getCompletedCount() {
+        return completedCount;
+    }
 
-	public void setUsers(List<EnrolledUserDTO> users) {
-		this.users = users;
-	}
+    public void setCompletedCount(int completedCount) {
+        this.completedCount = completedCount;
+    }
 
-    
+    public List<EnrolledUserDTO> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<EnrolledUserDTO> users) {
+        this.users = users;
+    }
 }
-
