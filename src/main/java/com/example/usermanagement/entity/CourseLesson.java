@@ -2,7 +2,17 @@ package com.example.usermanagement.entity;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "course_lessons")
@@ -15,16 +25,17 @@ public class CourseLesson {
     // Many lessons in one course
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", nullable = false)
+    @JsonIgnore
     private Course course;
 
-    // ✅ BASIC COLUMN (NOT JoinColumn)
+    // BASIC COLUMN (NOT JoinColumn)
     @Column(name = "lesson_title", nullable = false)
     private String lessonTitle;
 
     @Column(name = "youtube_url", length = 500, nullable = false)
     private String youtubeUrl;
 
-    // ✅ BASIC COLUMN (NOT JoinColumn)
+    // BASIC COLUMN (NOT JoinColumn)
     @Column(name = "lesson_order", nullable = false)
     private Integer lessonOrder;
 
