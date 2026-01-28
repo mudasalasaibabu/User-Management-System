@@ -109,4 +109,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Query(value = "UPDATE users SET password = ?2 WHERE email_id = ?1", nativeQuery = true)
     void updatePassword(String email, String password);
+    @Modifying
+    @Query("""
+    UPDATE UserCourse uc
+    SET uc.completed = true
+    WHERE uc.user.id = :userId AND uc.course.id = :courseId
+    """)
+    void markCourseCompleted(Long userId, Long courseId);
+
 }

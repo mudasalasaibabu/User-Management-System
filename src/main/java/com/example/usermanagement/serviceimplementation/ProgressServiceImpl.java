@@ -43,6 +43,15 @@ public class ProgressServiceImpl implements ProgressService {
                 .orElseThrow(() -> new RuntimeException("Lesson not found"));
 
         progressRepository.save(new LessonProgress(user, lesson));
+        Long courseId = lesson.getCourse().getId();
+
+        int totalLessons = lessonRepository.countByCourse_Id(courseId);
+        int completedLessons = progressRepository
+                .countByUser_IdAndLesson_Course_Id(userId, courseId);
+
+        if (completedLessons == totalLessons) {
+            userRepository.markCourseCompleted(userId, courseId);
+        }
     }
     @Transactional(readOnly = true)
     @Override
