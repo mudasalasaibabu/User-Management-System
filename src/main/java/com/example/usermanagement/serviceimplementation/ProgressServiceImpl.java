@@ -47,7 +47,7 @@ public class ProgressServiceImpl implements ProgressService {
 
         int totalLessons = lessonRepository.countByCourse_Id(courseId);
         int completedLessons = progressRepository
-                .countByUser_IdAndLesson_Course_Id(userId, courseId);
+                .countByUser_IdAndLesson_Course_IdAndWatchedTrue(userId, courseId);
 
         if (completedLessons == totalLessons) {
             userRepository.markCourseCompleted(userId, courseId);
@@ -64,7 +64,7 @@ public class ProgressServiceImpl implements ProgressService {
         }
 
         int completedLessons =
-            progressRepository.countByUser_IdAndLesson_Course_Id(userId, courseId);
+            progressRepository.countByUser_IdAndLesson_Course_IdAndWatchedTrue(userId, courseId);
 
         int percentage = (int) ((completedLessons * 100.0) / totalLessons);
 

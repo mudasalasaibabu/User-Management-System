@@ -18,7 +18,8 @@ public interface LessonProgressRepository extends JpaRepository<LessonProgress,L
     List<LessonProgress> findByUser_IdAndLesson_Course_Id(Long userId, Long courseId);
     
 
-    int countByUser_IdAndLesson_Course_Id(Long userId, Long courseId);
+    int countByUser_IdAndLesson_Course_IdAndWatchedTrue(Long userId, Long courseId);
+
 
     @Query(value = """
     	    SELECT lp.lesson_id
