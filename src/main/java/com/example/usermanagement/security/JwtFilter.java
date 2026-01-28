@@ -42,10 +42,15 @@ public class JwtFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
 
         //Allow authentication & system settings APIs
-        if (path.startsWith("/api/auth")) {
+        if (path.startsWith("/api/auth")
+                || path.equals("/health")
+                || path.startsWith("/api/users/register")
+                || path.equals("/")) {
+
             filterChain.doFilter(request, response);
             return;
         }
+
 
 
         // JWT AUTHENTICATION FIRST 
