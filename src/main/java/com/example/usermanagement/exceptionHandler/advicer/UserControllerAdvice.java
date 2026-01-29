@@ -48,6 +48,7 @@ public class UserControllerAdvice {
     public ResponseEntity<ErrorDetails> handleAccessDeniedException(AccessDeniedException e) {
         return build(HttpStatus.FORBIDDEN, e.getMessage());
     }
+
     @ExceptionHandler(CourseDeletionException.class)
     public ResponseEntity<String> handleCourseDelete(CourseDeletionException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
@@ -55,11 +56,13 @@ public class UserControllerAdvice {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorDetails> handleRuntimeException(RuntimeException e) {
+        e.printStackTrace(); //  this will show real error in Render logs
         return build(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetails> handleGlobalExceptionHandler(Exception e) {
+        e.printStackTrace(); //  this will show real error in Render logs
         return build(
             HttpStatus.INTERNAL_SERVER_ERROR,
             "Something went wrong. Please try again."
