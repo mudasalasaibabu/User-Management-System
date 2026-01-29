@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.usermanagement.dto.CertificateDTO;
 import com.example.usermanagement.dto.UserCourseDTO;
-import com.example.usermanagement.entity.User;
 import com.example.usermanagement.repository.UserRepository;
 import com.example.usermanagement.service.CertificateService;
 import com.example.usermanagement.service.EnrollmentService;
+import com.example.usermanagement.serviceimplementation.UserPrincipal;
 
 @RestController
 @RequestMapping("/api/certificates")
@@ -92,17 +92,15 @@ public class CertificateController {
     
     //Helper Method
     private Long getLoggedInUserId() {
-
-        String email = SecurityContextHolder.getContext()
+        Object principal = SecurityContextHolder.getContext()
                 .getAuthentication()
-                .getName();
+                .getPrincipal();
 
-        System.out.println("JWT EMAIL = " + email);  //  ADD THIS
+        if (principal instanceof UserPrincipal userPrincipal) {
+            return userPrincipal.getUser().getId();
+        }
 
-        User user = userRepository.findByEmailId(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        return user.getId();
+        throw new RuntimeException("Unauthenticated");
     }
 
 }
