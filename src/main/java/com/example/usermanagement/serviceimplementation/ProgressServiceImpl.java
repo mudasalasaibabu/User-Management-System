@@ -13,8 +13,8 @@ import com.example.usermanagement.entity.User;
 import com.example.usermanagement.repository.CourseLessonRepository;
 import com.example.usermanagement.repository.LessonProgressRepository;
 import com.example.usermanagement.repository.UserRepository;
+import com.example.usermanagement.service.CertificateService;
 import com.example.usermanagement.service.ProgressService;
-
 @Service
 public class ProgressServiceImpl implements ProgressService {
 
@@ -27,11 +27,12 @@ public class ProgressServiceImpl implements ProgressService {
     @Autowired
     private UserRepository userRepository;
 
-    // Save lesson completion only
+    @Autowired
+    private CertificateService certificateService; // NEW
+
     @Override
     public void markLessonCompleted(Long userId, Long lessonId) {
 
-        // If already completed, do nothing
         if (progressRepository
                 .findByUser_IdAndLesson_Id(userId, lessonId)
                 .isPresent()) {
@@ -44,11 +45,19 @@ public class ProgressServiceImpl implements ProgressService {
         CourseLesson lesson = lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new RuntimeException("Lesson not found"));
 
-        // Constructor already sets watched = true and watchedAt = now
         progressRepository.save(new LessonProgress(user, lesson));
+
+        Long courseId = lesson.getCourse().getId();
+
+        int totalLessons = lessonRepository.countByCourse_Id(courseId);
+        int completedLessons =
+            progressRepository.countByUser_IdAndLesson_Course_IdAndWatchedTrue(userId, courseId);
+
+        if (completedLessons == totalLessons) {
+            certificateService.generateCertificate(userId, courseId);
+        }
     }
 
-    // Always calculate progress dynamically
     @Transactional(readOnly = true)
     @Override
     public ProgressDTO getCourseProgress(Long userId, Long courseId) {

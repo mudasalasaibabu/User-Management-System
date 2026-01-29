@@ -39,25 +39,43 @@ public class CertificateServiceImpl implements CertificateService {
     @Autowired
     private CourseRepository courseRepository;
 
-    @Autowired
-    private ProgressService progressService;
+//    @Autowired
+//    private ProgressService progressService;
+    
 
     //CREATE / FETCH CERTIFICATE 
-
+//
+//    @Override
+//    public Certificate generateCertificate(Long userId, Long courseId) {
+//
+//        // If certificate already exists → return it (DO NOT recheck progress)
+//        return certificateRepository
+//            .findByUser_IdAndCourse_Id(userId, courseId)
+//            .orElseGet(() -> {
+//
+//                ProgressDTO progress =
+//                    progressService.getCourseProgress(userId, courseId);
+//
+//                if (progress.getPercentage() < 100) {
+//                    throw new RuntimeException("Course not completed yet");
+//                }
+//
+//                User user = userRepository.findById(userId)
+//                        .orElseThrow(() -> new RuntimeException("User not found"));
+//
+//                Course course = courseRepository.findById(courseId)
+//                        .orElseThrow(() -> new RuntimeException("Course not found"));
+//
+//                Certificate cert = new Certificate(user, course);
+//                return certificateRepository.save(cert);
+//            });
+//    }
     @Override
     public Certificate generateCertificate(Long userId, Long courseId) {
 
-        // If certificate already exists → return it (DO NOT recheck progress)
         return certificateRepository
             .findByUser_IdAndCourse_Id(userId, courseId)
             .orElseGet(() -> {
-
-                ProgressDTO progress =
-                    progressService.getCourseProgress(userId, courseId);
-
-                if (progress.getPercentage() < 100) {
-                    throw new RuntimeException("Course not completed yet");
-                }
 
                 User user = userRepository.findById(userId)
                         .orElseThrow(() -> new RuntimeException("User not found"));
@@ -69,6 +87,7 @@ public class CertificateServiceImpl implements CertificateService {
                 return certificateRepository.save(cert);
             });
     }
+
 
     //PDF GENERATION 
 
