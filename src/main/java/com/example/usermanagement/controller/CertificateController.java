@@ -92,6 +92,7 @@ public class CertificateController {
     
     //Helper Method
     private Long getLoggedInUserId() {
+
         Object principal = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal();
@@ -100,7 +101,14 @@ public class CertificateController {
             return userPrincipal.getUser().getId();
         }
 
+        if (principal instanceof String email) {
+            return userRepository.findByEmailId(email)
+                    .orElseThrow(() -> new RuntimeException("User not found"))
+                    .getId();
+        }
+
         throw new RuntimeException("Unauthenticated");
     }
+
 
 }
