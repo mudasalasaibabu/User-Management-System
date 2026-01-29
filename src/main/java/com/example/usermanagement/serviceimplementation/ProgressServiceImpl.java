@@ -27,9 +27,11 @@ public class ProgressServiceImpl implements ProgressService {
     @Autowired
     private UserRepository userRepository;
 
+    // Save lesson completion only
     @Override
     public void markLessonCompleted(Long userId, Long lessonId) {
 
+        // If already completed, do nothing
         if (progressRepository
                 .findByUser_IdAndLesson_Id(userId, lessonId)
                 .isPresent()) {
@@ -42,17 +44,11 @@ public class ProgressServiceImpl implements ProgressService {
         CourseLesson lesson = lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new RuntimeException("Lesson not found"));
 
+        // Constructor already sets watched = true and watchedAt = now
         progressRepository.save(new LessonProgress(user, lesson));
-        Long courseId = lesson.getCourse().getId();
-
-        int totalLessons = lessonRepository.countByCourse_Id(courseId);
-        int completedLessons = progressRepository
-                .countByUser_IdAndLesson_Course_IdAndWatchedTrue(userId, courseId);
-
-        if (completedLessons == totalLessons) {
-            userRepository.markCourseCompleted(userId, courseId);
-        }
     }
+
+    // Always calculate progress dynamically
     @Transactional(readOnly = true)
     @Override
     public ProgressDTO getCourseProgress(Long userId, Long courseId) {
@@ -68,7 +64,6 @@ public class ProgressServiceImpl implements ProgressService {
 
         int percentage = (int) ((completedLessons * 100.0) / totalLessons);
 
-        // ✅ NEW: get completed lesson IDs
         List<Long> completedLessonIds =
             progressRepository.findLessonIdsByUserAndCourse(userId, courseId);
 
