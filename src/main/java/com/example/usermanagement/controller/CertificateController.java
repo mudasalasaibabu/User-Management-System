@@ -1,5 +1,4 @@
 package com.example.usermanagement.controller;
-import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -8,17 +7,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.usermanagement.dto.CertificateDTO;
-import com.example.usermanagement.dto.UserCourseDTO;
+import com.example.usermanagement.entity.Certificate;
 import com.example.usermanagement.repository.UserRepository;
 import com.example.usermanagement.service.CertificateService;
-import com.example.usermanagement.service.EnrollmentService;
 import com.example.usermanagement.serviceimplementation.UserPrincipal;
 
 @RestController
@@ -31,57 +27,46 @@ public class CertificateController {
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    public  EnrollmentService enrollmentService;
-    //EXISTING API (JSON DETAILS) 
+
+    // -----------------------------
+    // Get single certificate (JSON)
+    // -----------------------------
     @GetMapping("/courses/{courseId}")
     public CertificateDTO getCertificate(@PathVariable Long courseId) {
-
         Long userId = getLoggedInUserId();
-
-        //  Just trigger generation (if needed)
-        certificateService.generateCertificate(userId, courseId);
-
-        //  Reuse service DTO logic
-        List<CertificateDTO> certs =
-                certificateService.getMyCertificateDTOs(userId);
-
-        for (CertificateDTO dto : certs) {
-            if (dto.getCourseId().equals(courseId)) {
-                return dto;
-            }
-        }
-
-        throw new RuntimeException("Certificate not found");
+        return certificateService.getCertificateForCourse(userId, courseId);
     }
 
-    //NEW API (PDF DOWNLOAD)
 
+    // -----------------------------
+    // Download PDF
+    // -----------------------------
     @GetMapping("/courses/{courseId}/download")
-    public ResponseEntity<byte[]> downloadCertificate(
-            @PathVariable Long courseId) {
+    public ResponseEntity<byte[]> downloadCertificate(@PathVariable Long courseId) {
 
         Long userId = getLoggedInUserId();
 
-        byte[] pdf =
-                certificateService.generateCertificatePdf(userId, courseId);
+        byte[] pdf = certificateService.generateCertificatePdf(userId, courseId);
 
         return ResponseEntity.ok()
-                .header(
-                        HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=certificate-course-" + courseId + ".pdf"
-                )
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=certificate-course-" + courseId + ".pdf")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdf);
     }
-    @GetMapping("/my-certificates")
-    public List<CertificateDTO> getMyCertificates(Authentication authentication) {
 
-        Object principal = authentication.getPrincipal();
+    // -----------------------------
+    // FIXED: My Certificates
+    // -----------------------------
+    @GetMapping("/my-certificates")
+    public List<Certificate> getMyCertificates(Authentication authentication) {
 
         Long userId;
 
-        if (principal instanceof UserPrincipal userPrincipal) {
+        Object principal = authentication.getPrincipal();
+
+        if (principal instanceof UserPrincipal) {
+            UserPrincipal userPrincipal = (UserPrincipal) principal;
             userId = userPrincipal.getUser().getId();
         } else {
             String email = authentication.getName();
@@ -90,30 +75,26 @@ public class CertificateController {
                     .getId();
         }
 
-        List<UserCourseDTO> enrolledCourses = enrollmentService.getMyCourses(userId);
-
-        for (UserCourseDTO course : enrolledCourses) {
-            certificateService.generateCertificate(userId, course.getCourseId());
-        }
-
-        return certificateService.getMyCertificateDTOs(userId);
+        // ✅ ONLY return certificates (no generation here)
+        return certificateService.getMyCertificates(userId);
     }
 
-
-
-    
-    //Helper Method
+    // -----------------------------
+    // Helper
+    // -----------------------------
     private Long getLoggedInUserId() {
 
         Object principal = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal();
 
-        if (principal instanceof UserPrincipal userPrincipal) {
+        if (principal instanceof UserPrincipal) {
+            UserPrincipal userPrincipal = (UserPrincipal) principal;
             return userPrincipal.getUser().getId();
         }
 
-        if (principal instanceof String email) {
+        if (principal instanceof String) {
+            String email = (String) principal;
             return userRepository.findByEmailId(email)
                     .orElseThrow(() -> new RuntimeException("User not found"))
                     .getId();
@@ -121,6 +102,4 @@ public class CertificateController {
 
         throw new RuntimeException("Unauthenticated");
     }
-
-
 }

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,10 @@ import com.example.usermanagement.dto.CertificateDTO;
 import com.example.usermanagement.entity.Certificate;
 import com.example.usermanagement.entity.Course;
 import com.example.usermanagement.entity.User;
+import com.example.usermanagement.entity.UserCourse;
 import com.example.usermanagement.repository.CertificateRepository;
 import com.example.usermanagement.repository.CourseRepository;
+import com.example.usermanagement.repository.UserCourseRepository;
 import com.example.usermanagement.repository.UserRepository;
 import com.example.usermanagement.service.CertificateService;
 import com.lowagie.text.Document;
@@ -36,6 +39,8 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private UserCourseRepository  userCourseRepository;
 
 //    @Autowired
 //    private ProgressService progressService;
@@ -69,23 +74,34 @@ public class CertificateServiceImpl implements CertificateService {
 //            });
 //    }
 
-@Transactional(readOnly = true)
+    @Transactional
     @Override
     public Certificate generateCertificate(Long userId, Long courseId) {
 
-        return certificateRepository
-            .findByUser_IdAndCourse_Id(userId, courseId)
-            .orElseGet(() -> {
+        // If already exists, return it
+        Optional<Certificate> existing =
+                certificateRepository.findByUser_IdAndCourse_Id(userId, courseId);
 
-                User user = userRepository.findById(userId)
-                        .orElseThrow(() -> new RuntimeException("User not found"));
+        if (existing.isPresent()) {
+            return existing.get();
+        }
 
-                Course course = courseRepository.findById(courseId)
-                        .orElseThrow(() -> new RuntimeException("Course not found"));
+        // Check if course is completed
+        Optional<UserCourse> uc =
+                userCourseRepository.findByUser_IdAndCourse_Id(userId, courseId);
 
-                Certificate cert = new Certificate(user, course);
-                return certificateRepository.save(cert);
-            });
+        if (uc.isEmpty() || !uc.get().getCompleted()) {
+            throw new RuntimeException("Course not completed yet");
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        Certificate cert = new Certificate(user, course);
+        return certificateRepository.save(cert);
     }
 
 
@@ -178,23 +194,55 @@ public class CertificateServiceImpl implements CertificateService {
         return out.toByteArray();
     }
     @Override
-    public List<CertificateDTO> getMyCertificateDTOs(Long userId) {
+    public List<Certificate> getMyCertificates(Long userId) {
 
-        List<Certificate> certificates =
-                certificateRepository.findByUserWithCourse(userId);
+        // Get only completed courses
+        List<UserCourse> completedCourses =
+                userCourseRepository.findByUser_IdAndCompletedTrue(userId);
 
-        List<CertificateDTO> response = new ArrayList<>();
+        List<Certificate> result = new ArrayList<>();
 
-        for (Certificate cert : certificates) {
-            response.add(new CertificateDTO(
-                    cert.getCourse().getId(),   
-                    cert.getCourse().getTitle(),
-                    cert.getCertificateCode(),
-                    cert.getIssuedAt()
-            ));
+        for (int i = 0; i < completedCourses.size(); i++) {
+
+            UserCourse uc = completedCourses.get(i);
+
+            Optional<Certificate> cert =
+                    certificateRepository.findByUser_IdAndCourse_Id(
+                            userId,
+                            uc.getCourse().getId()
+                    );
+
+            if (cert.isPresent()) {
+                result.add(cert.get());
+            }
         }
 
-        return response;
+        return result;
+    }
+
+    @Override
+    public CertificateDTO getCertificateForCourse(Long userId, Long courseId) {
+
+        List<UserCourse> completedCourses =
+                userCourseRepository.findByUser_IdAndCompletedTrue(userId);
+
+        for (int i = 0; i < completedCourses.size(); i++) {
+            UserCourse uc = completedCourses.get(i);
+
+            if (uc.getCourse().getId().equals(courseId)) {
+
+                Certificate cert = generateCertificate(userId, courseId);
+
+                return new CertificateDTO(
+                        cert.getCourse().getId(),
+                        cert.getCourse().getTitle(),
+                        cert.getCertificateCode(),
+                        cert.getIssuedAt()
+                );
+            }
+        }
+
+        throw new RuntimeException("Course not completed, certificate not available");
     }
 
 

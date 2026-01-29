@@ -25,5 +25,7 @@ public interface UserCourseRepository extends JpaRepository<UserCourse, Long> {/
 
     // 3. List of enrolled users for a course
     List<UserCourse> findByCourse_Id(Long courseId);
+    //4. Fetch only completed courses of a user (IMPORTANT for certificates)
+    List<UserCourse> findByUser_IdAndCompletedTrue(Long userId);
 
 }
