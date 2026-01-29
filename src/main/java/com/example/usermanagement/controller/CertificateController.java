@@ -1,4 +1,5 @@
 package com.example.usermanagement.controller;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -74,11 +75,21 @@ public class CertificateController {
                 .body(pdf);
     }
     @GetMapping("/my-certificates")
-    public List<CertificateDTO> getMyCertificates() {
+    public List<CertificateDTO> getMyCertificates(Authentication authentication) {
 
-        Long userId = getLoggedInUserId();
+        Object principal = authentication.getPrincipal();
 
-        //  Auto-generate certificates for completed courses
+        Long userId;
+
+        if (principal instanceof UserPrincipal userPrincipal) {
+            userId = userPrincipal.getUser().getId();
+        } else {
+            String email = authentication.getName();
+            userId = userRepository.findByEmailId(email)
+                    .orElseThrow(() -> new RuntimeException("User not found"))
+                    .getId();
+        }
+
         List<UserCourseDTO> enrolledCourses = enrollmentService.getMyCourses(userId);
 
         for (UserCourseDTO course : enrolledCourses) {
@@ -87,6 +98,7 @@ public class CertificateController {
 
         return certificateService.getMyCertificateDTOs(userId);
     }
+
 
 
     
