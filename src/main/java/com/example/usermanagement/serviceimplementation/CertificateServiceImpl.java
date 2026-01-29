@@ -181,7 +181,7 @@ public class CertificateServiceImpl implements CertificateService {
     public List<CertificateDTO> getMyCertificateDTOs(Long userId) {
 
         List<Certificate> certificates =
-                certificateRepository.findByUser_Id(userId);
+                certificateRepository.findByUserWithCourse(userId);
 
         List<CertificateDTO> response = new ArrayList<>();
 

@@ -56,13 +56,13 @@ public class UserControllerAdvice {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorDetails> handleRuntimeException(RuntimeException e) {
-        e.printStackTrace(); //  this will show real error in Render logs
+        e.printStackTrace(); // this will show real error in Render logs
         return build(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetails> handleGlobalExceptionHandler(Exception e) {
-        e.printStackTrace(); //  this will show real error in Render logs
+        e.printStackTrace(); // this will show real error in Render logs
         return build(
             HttpStatus.INTERNAL_SERVER_ERROR,
             "Something went wrong. Please try again."
