@@ -1,5 +1,6 @@
 package com.example.usermanagement.serviceimplementation;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,10 @@ import com.example.usermanagement.dto.ProgressDTO;
 import com.example.usermanagement.entity.CourseLesson;
 import com.example.usermanagement.entity.LessonProgress;
 import com.example.usermanagement.entity.User;
+import com.example.usermanagement.entity.UserCourse;
 import com.example.usermanagement.repository.CourseLessonRepository;
 import com.example.usermanagement.repository.LessonProgressRepository;
+import com.example.usermanagement.repository.UserCourseRepository;
 import com.example.usermanagement.repository.UserRepository;
 import com.example.usermanagement.service.CertificateService;
 import com.example.usermanagement.service.ProgressService;
@@ -28,7 +31,10 @@ public class ProgressServiceImpl implements ProgressService {
     private UserRepository userRepository;
 
     @Autowired
-    private CertificateService certificateService; // NEW
+    private CertificateService certificateService; 
+    
+    @Autowired
+    private UserCourseRepository userCourseRepository;
 
     @Override
     public void markLessonCompleted(Long userId, Long lessonId) {
@@ -54,8 +60,20 @@ public class ProgressServiceImpl implements ProgressService {
             progressRepository.countByUser_IdAndLesson_Course_IdAndWatchedTrue(userId, courseId);
 
         if (completedLessons == totalLessons) {
+
+            UserCourse userCourse = userCourseRepository
+                .findByUser_IdAndCourse_Id(userId, courseId)
+                .orElseThrow(() -> new RuntimeException("Enrollment not found"));
+            if (!userCourse.getCompleted()) {
+                userCourse.setCompleted(true);
+                userCourse.setCompletedAt(LocalDateTime.now());
+                userCourseRepository.save(userCourse);
+            }
+
             certificateService.generateCertificate(userId, courseId);
         }
+
+
     }
 
     @Transactional(readOnly = true)
