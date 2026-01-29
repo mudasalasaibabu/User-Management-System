@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.usermanagement.dto.CertificateDTO;
+import com.example.usermanagement.dto.UserCourseDTO;
 import com.example.usermanagement.entity.User;
 import com.example.usermanagement.repository.UserRepository;
 import com.example.usermanagement.service.CertificateService;
+import com.example.usermanagement.service.EnrollmentService;
 
 @RestController
 @RequestMapping("/api/certificates")
@@ -28,18 +30,18 @@ public class CertificateController {
 
     @Autowired
     private UserRepository userRepository;
-    
-    
+    @Autowired
+    public  EnrollmentService enrollmentService;
     //EXISTING API (JSON DETAILS) 
     @GetMapping("/courses/{courseId}")
     public CertificateDTO getCertificate(@PathVariable Long courseId) {
 
         Long userId = getLoggedInUserId();
 
-        // 🔥 Just trigger generation (if needed)
+        //  Just trigger generation (if needed)
         certificateService.generateCertificate(userId, courseId);
 
-        // 🔥 Reuse service DTO logic
+        //  Reuse service DTO logic
         List<CertificateDTO> certs =
                 certificateService.getMyCertificateDTOs(userId);
 
@@ -76,8 +78,16 @@ public class CertificateController {
 
         Long userId = getLoggedInUserId();
 
+        //  Auto-generate certificates for completed courses
+        List<UserCourseDTO> enrolledCourses = enrollmentService.getMyCourses(userId);
+
+        for (UserCourseDTO course : enrolledCourses) {
+            certificateService.generateCertificate(userId, course.getCourseId());
+        }
+
         return certificateService.getMyCertificateDTOs(userId);
     }
+
 
     
     //Helper Method
