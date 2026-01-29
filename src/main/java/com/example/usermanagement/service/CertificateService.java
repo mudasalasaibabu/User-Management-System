@@ -9,6 +9,7 @@ public interface CertificateService {
 	// Generate or fetch certificate
     Certificate generateCertificate(Long userId, Long courseId);
     byte[] generateCertificatePdf(Long userId, Long courseId);
-    public List<Certificate> getMyCertificates(Long userId);
+    List<CertificateDTO> getMyCertificates(Long userId);
+
 	CertificateDTO getCertificateForCourse(Long userId, Long courseId);
 }

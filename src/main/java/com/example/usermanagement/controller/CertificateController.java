@@ -12,7 +12,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.usermanagement.dto.CertificateDTO;
-import com.example.usermanagement.entity.Certificate;
 import com.example.usermanagement.repository.UserRepository;
 import com.example.usermanagement.service.CertificateService;
 import com.example.usermanagement.serviceimplementation.UserPrincipal;
@@ -59,7 +58,7 @@ public class CertificateController {
     // FIXED: My Certificates
     // -----------------------------
     @GetMapping("/my-certificates")
-    public List<Certificate> getMyCertificates(Authentication authentication) {
+    public List<CertificateDTO> getMyCertificates(Authentication authentication) {
 
         Long userId;
 
@@ -75,7 +74,7 @@ public class CertificateController {
                     .getId();
         }
 
-        // ✅ ONLY return certificates (no generation here)
+        // ONLY return certificates (no generation here)
         return certificateService.getMyCertificates(userId);
     }
 

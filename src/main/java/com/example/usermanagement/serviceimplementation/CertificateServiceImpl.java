@@ -194,13 +194,12 @@ public class CertificateServiceImpl implements CertificateService {
         return out.toByteArray();
     }
     @Override
-    public List<Certificate> getMyCertificates(Long userId) {
+    public List<CertificateDTO> getMyCertificates(Long userId) {
 
-        // Get only completed courses
         List<UserCourse> completedCourses =
                 userCourseRepository.findByUser_IdAndCompletedTrue(userId);
 
-        List<Certificate> result = new ArrayList<>();
+        List<CertificateDTO> result = new ArrayList<>();
 
         for (int i = 0; i < completedCourses.size(); i++) {
 
@@ -213,12 +212,22 @@ public class CertificateServiceImpl implements CertificateService {
                     );
 
             if (cert.isPresent()) {
-                result.add(cert.get());
+                Certificate c = cert.get();
+
+                CertificateDTO dto = new CertificateDTO(
+                        c.getCourse().getId(),
+                        c.getCourse().getTitle(),
+                        c.getCertificateCode(),
+                        c.getIssuedAt()
+                );
+
+                result.add(dto);
             }
         }
 
         return result;
     }
+
 
     @Override
     public CertificateDTO getCertificateForCourse(Long userId, Long courseId) {
