@@ -93,14 +93,16 @@ public class CertificateController {
     //Helper Method
     private Long getLoggedInUserId() {
 
-        String email = SecurityContextHolder
-                .getContext()
+        String email = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
+
+        System.out.println("JWT EMAIL = " + email);  //  ADD THIS
 
         User user = userRepository.findByEmailId(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         return user.getId();
     }
+
 }
