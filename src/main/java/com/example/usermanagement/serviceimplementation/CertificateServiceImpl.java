@@ -7,11 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.usermanagement.dto.CertificateDTO;
-import com.example.usermanagement.dto.ProgressDTO;
 import com.example.usermanagement.entity.Certificate;
 import com.example.usermanagement.entity.Course;
 import com.example.usermanagement.entity.User;
@@ -19,7 +18,6 @@ import com.example.usermanagement.repository.CertificateRepository;
 import com.example.usermanagement.repository.CourseRepository;
 import com.example.usermanagement.repository.UserRepository;
 import com.example.usermanagement.service.CertificateService;
-import com.example.usermanagement.service.ProgressService;
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
@@ -70,6 +68,8 @@ public class CertificateServiceImpl implements CertificateService {
 //                return certificateRepository.save(cert);
 //            });
 //    }
+
+@Transactional(readOnly = true)
     @Override
     public Certificate generateCertificate(Long userId, Long courseId) {
 
