@@ -74,7 +74,7 @@ public class CertificateServiceImpl implements CertificateService {
 //            });
 //    }
 
-    @Transactional
+    @Transactional(readOnly=true)
     @Override
     public Certificate generateCertificate(Long userId, Long courseId) {
 
@@ -193,6 +193,7 @@ public class CertificateServiceImpl implements CertificateService {
 
         return out.toByteArray();
     }
+    @Transactional(readOnly=true)
     @Override
     public List<CertificateDTO> getMyCertificates(Long userId) {
 
