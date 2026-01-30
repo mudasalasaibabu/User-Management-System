@@ -30,15 +30,16 @@ public class CourseServiceImpl implements CourseService {
         List<CourseResponseDTO> response = new ArrayList<>();
 
         for (Course c : courses) {
-            response.add(new CourseResponseDTO(
-                    c.getId(),
-                    c.getTitle(),
-                    c.getDescription(),
-                    c.getLevel(),
-                    c.getDurationHours(),
-                    c.getCourseImageUrl(),
-                    c.getActive()
-            ));
+        	response.add(new CourseResponseDTO(
+        		    c.getId(),
+        		    c.getTitle(),
+        		    c.getDescription(),
+        		    c.getLevel(),
+        		    c.getLanguage(),      
+        		    c.getDurationHours(),
+        		    c.getCourseImageUrl(),
+        		    c.getActive()
+        		));
         }
 
         return response;

@@ -34,23 +34,28 @@ public class Course {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    @Column(name = "language")
+    private String language;
 
     public Course() {
     }
 
     public Course(String title, String description, String level,
-                  Integer durationHours, String courseImageUrl,
-                  Long createdBy, Boolean active) {
+            String language,
+            Integer durationHours, String courseImageUrl,
+            Long createdBy, Boolean active) {
 
-        this.title = title;
-        this.description = description;
-        this.level = level;
-        this.durationHours = durationHours;
-        this.courseImageUrl = courseImageUrl;
-        this.createdBy = createdBy;
-        this.active = active;
-        this.createdAt = LocalDateTime.now();
-    }
+  this.title = title;
+  this.description = description;
+  this.level = level;
+  this.language = language; 
+  this.durationHours = durationHours;
+  this.courseImageUrl = courseImageUrl;
+  this.createdBy = createdBy;
+  this.active = active;
+  this.createdAt = LocalDateTime.now();
+}
+
 
     // ===== Getters & Setters =====
 
@@ -133,5 +138,12 @@ public class Course {
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-    
+	public String getLanguage() {
+	    return language;
+	}
+
+	public void setLanguage(String language) {
+	    this.language = language;
+	}
+
 }
