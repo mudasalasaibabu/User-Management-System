@@ -36,6 +36,7 @@ public class AdminCourseServiceImpl implements AdminCourseService {
         return courseRepository.save(course);
     }
 
+ 
     @Override
     public Course updateCourse(Long courseId, Course course) {
 
@@ -45,12 +46,14 @@ public class AdminCourseServiceImpl implements AdminCourseService {
         existing.setTitle(course.getTitle());
         existing.setDescription(course.getDescription());
         existing.setLevel(course.getLevel());
+        existing.setLanguage(course.getLanguage());  
         existing.setDurationHours(course.getDurationHours());
         existing.setCourseImageUrl(course.getCourseImageUrl());
         existing.setUpdatedAt(LocalDateTime.now());
 
         return courseRepository.save(existing);
     }
+
     
     @Override
     public void deleteCourse(Long courseId) {
