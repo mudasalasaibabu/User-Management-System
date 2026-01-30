@@ -43,7 +43,8 @@ public class CourseAnalyticsServiceImp implements CourseAnalyticsService {
 	                u.getId(),
 	                u.getUserName(),
 	                u.getEmailId(),
-	                uc.getCompleted()
+	                uc.getCompleted(),
+	                uc.getProgressPercentage()
 	        ));
 	    }
 

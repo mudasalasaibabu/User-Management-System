@@ -27,7 +27,7 @@ public class UserCourse {
     private Boolean completed;
 
     private LocalDateTime completedAt;
-
+    private int progressPercentage;
     public UserCourse() {
     }
 
@@ -35,11 +35,18 @@ public class UserCourse {
         this.user = user;
         this.course = course;
         this.completed = false;
+        this.progressPercentage = 0;
         this.enrolledAt = LocalDateTime.now();
     }
 
     // ===== Getters & Setters =====
+    public int getProgressPercentage() {
+        return progressPercentage;
+    }
 
+    public void setProgressPercentage(int progressPercentage) {
+        this.progressPercentage = progressPercentage;
+    }
     public Long getId() {
         return id;
     }
