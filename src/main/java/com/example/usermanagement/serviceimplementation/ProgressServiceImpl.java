@@ -18,6 +18,7 @@ import com.example.usermanagement.repository.UserCourseRepository;
 import com.example.usermanagement.repository.UserRepository;
 import com.example.usermanagement.service.CertificateService;
 import com.example.usermanagement.service.ProgressService;
+
 @Service
 public class ProgressServiceImpl implements ProgressService {
 
@@ -31,11 +32,13 @@ public class ProgressServiceImpl implements ProgressService {
     private UserRepository userRepository;
 
     @Autowired
-    private CertificateService certificateService; 
-    
+    private CertificateService certificateService;
+
     @Autowired
     private UserCourseRepository userCourseRepository;
 
+    // ✅ FULL UPDATED METHOD
+    @Transactional
     @Override
     public void markLessonCompleted(Long userId, Long lessonId) {
 
@@ -59,21 +62,24 @@ public class ProgressServiceImpl implements ProgressService {
         int completedLessons =
             progressRepository.countByUser_IdAndLesson_Course_IdAndWatchedTrue(userId, courseId);
 
-        if (completedLessons == totalLessons) {
+        // CALCULATE PROGRESS %
+        int percentage = (completedLessons * 100) / totalLessons;
 
-            UserCourse userCourse = userCourseRepository
-                .findByUser_IdAndCourse_Id(userId, courseId)
-                .orElseThrow(() -> new RuntimeException("Enrollment not found"));
-            if (!userCourse.getCompleted()) {
-                userCourse.setCompleted(true);
-                userCourse.setCompletedAt(LocalDateTime.now());
-                userCourseRepository.save(userCourse);
-            }
+        UserCourse userCourse = userCourseRepository
+            .findByUser_IdAndCourse_Id(userId, courseId)
+            .orElseThrow(() -> new RuntimeException("Enrollment not found"));
 
+        // SAVE PROGRESS
+        userCourse.setProgressPercentage(percentage);
+
+        // MARK COMPLETED IF 100%
+        if (completedLessons == totalLessons && !userCourse.getCompleted()) {
+            userCourse.setCompleted(true);
+            userCourse.setCompletedAt(LocalDateTime.now());
             certificateService.generateCertificate(userId, courseId);
         }
 
-
+        userCourseRepository.save(userCourse);
     }
 
     @Transactional(readOnly = true)
