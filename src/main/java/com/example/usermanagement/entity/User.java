@@ -49,6 +49,8 @@ public class User {
 
     @OneToOne(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true)
     private ForgotPassword forgotPassword;
+    @Column(name ="domain",nullable=false)
+    private String domain;
 
     @PrePersist
     public void onCreate() {
@@ -70,15 +72,24 @@ public class User {
 
 	public User() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public User(String userName, String emailId, String password, Role role) {
+	public User(String userName, String emailId, String password,String domain, Role role) {
 		super();
 		this.userName = userName;
 		this.emailId = emailId;
 		this.password = password;
+		this.domain=domain;
 		this.role = role;
+	}
+	
+
+	public String getDomain() {
+		return domain;
+	}
+
+	public void setDomain(String domain) {
+		this.domain = domain;
 	}
 
 	public Long getId() {

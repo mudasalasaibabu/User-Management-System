@@ -18,14 +18,16 @@ public class RegisterUserRequestDTO {
 	@NotBlank
 	@Size(min=8)
     private String password;
+	private String domain;
 	public RegisterUserRequestDTO() {
 		super();
 	}
-	public RegisterUserRequestDTO(String userName, String emailId, String password) {
+	public RegisterUserRequestDTO(String userName, String emailId, String password,String domain) {
 		super();
 		this.userName = userName;
 		this.emailId = emailId;
 		this.password = password;
+		this.domain=domain;
 	}
 	public String getUserName() {
 		return userName;
@@ -44,6 +46,12 @@ public class RegisterUserRequestDTO {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String getDomain() {
+		return domain;
+	}
+	public void setDomain(String domain) {
+		this.domain = domain;
 	}
 	
     

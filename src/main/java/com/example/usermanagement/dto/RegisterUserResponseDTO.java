@@ -8,6 +8,7 @@ public class RegisterUserResponseDTO {
 		private Long id;
 	    private String userName;
 	    private String emailId;
+	    private String domain;
 	    private Role role;
 	    private boolean enabled;
 	    private LocalDateTime createdAt;
@@ -17,10 +18,11 @@ public class RegisterUserResponseDTO {
 			super();
 		}
 
-		public RegisterUserResponseDTO(String userName, String emailId, Role role,boolean enabled) {
+		public RegisterUserResponseDTO(String userName, String emailId,String domain, Role role,boolean enabled) {
 			super();
 			this.userName = userName;
 			this.emailId = emailId;
+			this.domain=domain;
 			this.role = role;
 			 this.enabled = enabled;
 		}
@@ -85,6 +87,14 @@ public class RegisterUserResponseDTO {
 
 		public void setLastLoginAt(LocalDateTime lastLoginAt) {
 			this.lastLoginAt = lastLoginAt;
+		}
+
+		public String getDomain() {
+			return domain;
+		}
+
+		public void setDomain(String domain) {
+			this.domain = domain;
 		}
 		
 }

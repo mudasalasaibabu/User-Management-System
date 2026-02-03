@@ -50,6 +50,7 @@ public class UserServiceImp implements UserService {
 	    user.setUserName(dto.getUserName());
 	    user.setEmailId(dto.getEmailId());
 	    user.setPassword(passwordEncoder.encode(dto.getPassword()));
+	    user.setDomain(dto.getDomain());
 	    user.setRole(Role.USER);
 	    user.setEnabled(true);
 	    User savedUser = userRepo.save(user);
@@ -62,6 +63,7 @@ public class UserServiceImp implements UserService {
 	    dto.setId(user.getId());
 	    dto.setUserName(user.getUserName());
 	    dto.setEmailId(user.getEmailId());
+	    dto.setDomain(user.getDomain());
 	    dto.setRole(user.getRole());
 
 	    dto.setEnabled(user.isEnabled()); //THIS LINE FIXES EVERYTHING
@@ -159,7 +161,7 @@ public class UserServiceImp implements UserService {
 	        }
 	        user.setEmailId(dto.getEmailId());
 	    }
-
+	    user.setDomain(dto.getDomain());
 	    User updatedUser = userRepo.save(user);
 	    return mapToResponseDTO(updatedUser);
 	}
