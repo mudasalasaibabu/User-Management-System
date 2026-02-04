@@ -11,4 +11,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 	
 	// Fetch only active courses (USER side)
     List<Course> findByActiveTrue();
+    List<Course> findByActiveTrueAndDomain(String domain);
+
 }
