@@ -42,7 +42,7 @@ public class CourseServiceImpl implements CourseService {
 
         List<Course> courses;
 
-        // CSE CORE → show all
+        // CSE CORE -> show all
         if ("CSE CORE".equalsIgnoreCase(user.getDomain())) {
             courses = courseRepository.findByActiveTrue();
         } else {

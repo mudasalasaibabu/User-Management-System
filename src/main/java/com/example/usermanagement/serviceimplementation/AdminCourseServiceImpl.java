@@ -47,6 +47,7 @@ public class AdminCourseServiceImpl implements AdminCourseService {
         existing.setDescription(course.getDescription());
         existing.setLevel(course.getLevel());
         existing.setLanguage(course.getLanguage());  
+        existing.setDomain(course.getDomain());
         existing.setDurationHours(course.getDurationHours());
         existing.setCourseImageUrl(course.getCourseImageUrl());
         existing.setUpdatedAt(LocalDateTime.now());
