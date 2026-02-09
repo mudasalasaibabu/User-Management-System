@@ -9,9 +9,10 @@ public class CourseResponseDTO {
     private String language;         
     private Integer durationHours;
     private String courseImageUrl;
+    private String domain;
     private Boolean active;
 
-    public CourseResponseDTO(Long id,String title,String description, String level,String language,Integer durationHours,String courseImageUrl,Boolean active) {
+    public CourseResponseDTO(Long id,String title,String description, String level,String language,Integer durationHours,String courseImageUrl,String domain,Boolean active) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -19,6 +20,7 @@ public class CourseResponseDTO {
         this.language = language;  
         this.durationHours = durationHours;
         this.courseImageUrl = courseImageUrl;
+        this.domain=domain;
         this.active = active;
     }
 
@@ -39,7 +41,7 @@ public class CourseResponseDTO {
         return level;
     }
 
-    public String getLanguage() {     // ✅ added
+    public String getLanguage() {     //  added
         return language;
     }
 
@@ -50,8 +52,12 @@ public class CourseResponseDTO {
     public String getCourseImageUrl() {
         return courseImageUrl;
     }
+    public String getDomain() {
+		return domain;
+	}
 
     public Boolean getActive() {
         return active;
     }
+    
 }

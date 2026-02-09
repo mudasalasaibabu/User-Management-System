@@ -62,6 +62,7 @@ public class CourseServiceImpl implements CourseService {
                     c.getLanguage(),
                     c.getDurationHours(),
                     c.getCourseImageUrl(),
+                    c.getDomain(),
                     c.getActive()
             ));
         }

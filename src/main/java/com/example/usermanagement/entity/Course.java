@@ -31,7 +31,8 @@ public class Course {
     private Long createdBy;
 
     private Boolean active;
-
+    @Column(name ="domain",nullable=false)
+    private String domain;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     @Column(name = "language")
@@ -42,7 +43,7 @@ public class Course {
 
     public Course(String title, String description, String level,
             String language,
-            Integer durationHours, String courseImageUrl,
+            Integer durationHours, String courseImageUrl,String domain,
             Long createdBy, Boolean active) {
 
   this.title = title;
@@ -51,6 +52,7 @@ public class Course {
   this.language = language; 
   this.durationHours = durationHours;
   this.courseImageUrl = courseImageUrl;
+  this.domain=domain;
   this.createdBy = createdBy;
   this.active = active;
   this.createdAt = LocalDateTime.now();
@@ -144,6 +146,14 @@ public class Course {
 
 	public void setLanguage(String language) {
 	    this.language = language;
+	}
+
+	public String getDomain() {
+		return domain;
+	}
+
+	public void setDomain(String domain) {
+		this.domain = domain;
 	}
 
 }
