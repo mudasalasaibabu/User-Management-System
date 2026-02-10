@@ -142,7 +142,8 @@ public class AdminCourseServiceImpl implements AdminCourseService {
 	            l.getId(),
 	            l.getLessonTitle(),
 	            l.getYoutubeUrl(),
-	            l.getLessonOrder()
+	            l.getLessonOrder(),
+	            l.getNotesUrl()
 	        ));
 	    }
 

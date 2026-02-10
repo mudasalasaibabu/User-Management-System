@@ -38,6 +38,8 @@ public class CourseLesson {
     // BASIC COLUMN (NOT JoinColumn)
     @Column(name = "lesson_order", nullable = false)
     private Integer lessonOrder;
+    @Column(name = "notes_url", length = 2000)
+    private String notesUrl;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -48,13 +50,16 @@ public class CourseLesson {
     public CourseLesson() {}
 
     public CourseLesson(Course course, String lessonTitle,
-                        String youtubeUrl, Integer lessonOrder) {
-        this.course = course;
-        this.lessonTitle = lessonTitle;
-        this.youtubeUrl = youtubeUrl;
-        this.lessonOrder = lessonOrder;
-        this.createdAt = LocalDateTime.now();
-    }
+            String youtubeUrl, Integer lessonOrder,
+            String notesUrl) {
+this.course = course;
+this.lessonTitle = lessonTitle;
+this.youtubeUrl = youtubeUrl;
+this.lessonOrder = lessonOrder;
+this.notesUrl = notesUrl;
+this.createdAt = LocalDateTime.now();
+}
+
 
 	public Long getId() {
 		return id;
@@ -110,6 +115,13 @@ public class CourseLesson {
 
 	public void setActive(Boolean active) {
 		this.active = active;
+	}
+	public String getNotesUrl() {
+	    return notesUrl;
+	}
+
+	public void setNotesUrl(String notesUrl) {
+	    this.notesUrl = notesUrl;
 	}
 
    
