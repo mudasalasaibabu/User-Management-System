@@ -48,7 +48,7 @@ public class CourseServiceImpl implements CourseService {
         } else {
             // Domain specific
             courses = courseRepository
-                    .findByActiveTrueAndDomain(user.getDomain());
+                    .findByActiveTrueAndDomainContaining(user.getDomain());
         }
 
         List<CourseResponseDTO> response = new ArrayList<>();
