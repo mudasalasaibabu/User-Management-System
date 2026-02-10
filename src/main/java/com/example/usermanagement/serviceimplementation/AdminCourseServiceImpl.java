@@ -117,6 +117,7 @@ public class AdminCourseServiceImpl implements AdminCourseService {
 	    existing.setLessonTitle(lesson.getLessonTitle());
 	    existing.setYoutubeUrl(lesson.getYoutubeUrl());
 	    existing.setLessonOrder(lesson.getLessonOrder());
+	    existing.setNotesUrl(lesson.getNotesUrl());
 
 	    return lessonRepository.save(existing);
 	}
